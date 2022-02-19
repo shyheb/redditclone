@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
@@ -14,15 +16,12 @@ import java.time.Instant;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Comment {
+public class VerificationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
-    private String text;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId", referencedColumnName = "id")
-    private Post post;
-    private Instant createdDate;
-
+    private String token;
+    @OneToOne(fetch = FetchType.LAZY)
+    private User user;
+    private Instant expiryDate;
 }
