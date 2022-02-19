@@ -20,9 +20,9 @@ public class Comment {
     private Long id;
     @NotEmpty
     private String text;
+    private Instant createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId", referencedColumnName = "id")
     private Post post;
-    private Instant createdDate;
 
 }
