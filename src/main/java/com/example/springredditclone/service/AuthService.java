@@ -6,5 +6,5 @@ import com.example.springredditclone.payload.request.SignInRequest;
 public interface AuthService {
     void signUp(RegistraterRequest registraterRequest);
     void enableAccount(String token);
-    void signIn(SignInRequest signInRequest);
+    String signIn(SignInRequest signInRequest);
 }
