@@ -1,7 +1,7 @@
 package com.example.springredditclone.security;
 
 import com.example.springredditclone.exceptions.SpringRedditException;
-import com.example.springredditclone.service.impl.user.UserDetailsImpl;
+import com.example.springredditclone.model.User;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -19,7 +19,7 @@ public class JwtUtils {
     private int expirationMs;
 
     public String generateToken(Authentication authentication) {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        User userPrincipal = (User) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(userPrincipal.getEmail())
                 .setIssuedAt(new Date())

@@ -10,14 +10,12 @@ import com.example.springredditclone.repository.VerificationTokenRepository;
 import com.example.springredditclone.security.JwtUtils;
 import com.example.springredditclone.service.AuthService;
 import com.example.springredditclone.service.MailService;
-import com.example.springredditclone.service.impl.user.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +37,6 @@ public class AuthServiceImpl implements AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
-    private final UserDetailsService userDetailsService;
 
     @Override
     @Transactional
@@ -128,7 +125,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User userDetails = (User) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
