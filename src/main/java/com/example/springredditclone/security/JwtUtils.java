@@ -1,6 +1,7 @@
 package com.example.springredditclone.security;
 
-import com.example.springredditclone.exceptions.SpringRedditException;
+import com.example.springredditclone.exceptions.JwtException;
+import com.example.springredditclone.exceptions.NotFoundException;
 import com.example.springredditclone.model.User;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,15 +39,15 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecretCode).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
-            throw new SpringRedditException("Invalid Jwt Signature " + e.getMessage());
+            throw new JwtException("Invalid Jwt Signature " + e.getMessage());
         } catch (MalformedJwtException e) {
-            throw new SpringRedditException("Malformed Jwt " + e.getMessage());
+            throw new JwtException("Malformed Jwt " + e.getMessage());
         } catch (ExpiredJwtException e) {
-            throw new SpringRedditException("Expired Jwt " + e.getMessage());
+            throw new JwtException("Expired Jwt " + e.getMessage());
         } catch (UnsupportedJwtException e) {
-            throw new SpringRedditException("unsupported Jwt " + e.getMessage());
+            throw new JwtException("unsupported Jwt " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new SpringRedditException("illegalArgument Jwt " + e.getMessage());
+            throw new JwtException("illegalArgument Jwt " + e.getMessage());
         }
     }
 }

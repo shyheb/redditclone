@@ -1,6 +1,8 @@
 package com.example.springredditclone.service.impl.user;
 
-import com.example.springredditclone.exceptions.SpringRedditException;
+import com.example.springredditclone.exceptions.NotActivatedException;
+import com.example.springredditclone.exceptions.NotFoundException;
+import com.example.springredditclone.model.User;
 import com.example.springredditclone.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +19,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        return userRepository.findByEmail(username).orElseThrow(
-                () -> new SpringRedditException("User Not Found"));
+        User user = userRepository.findByEmail(username).orElseThrow(
+                () -> new NotFoundException("User Not Found"));
+
+        if (!user.isEnabled()){
+            throw new NotActivatedException("User Account not activated");
+        }
+
+        return user;
     }
 
 }

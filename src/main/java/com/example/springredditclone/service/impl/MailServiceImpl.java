@@ -1,12 +1,10 @@
 package com.example.springredditclone.service.impl;
 
-import com.example.springredditclone.exceptions.SpringRedditException;
 import com.example.springredditclone.model.NotificationEmail;
 import com.example.springredditclone.service.MailService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -36,7 +34,7 @@ public class MailServiceImpl implements MailService {
             javaMailSender.send(messagePreparator);
             log.info("Activation Email Send");
         } catch (MailException mailException) {
-            throw new SpringRedditException("Exception occured when when sending validation mail to " + notificationEmail.getRecipient());
+            throw new com.example.springredditclone.exceptions.MailException("Exception occured when when sending validation mail to " + notificationEmail.getRecipient());
         }
     }
 }

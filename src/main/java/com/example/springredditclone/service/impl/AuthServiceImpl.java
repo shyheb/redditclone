@@ -1,6 +1,6 @@
 package com.example.springredditclone.service.impl;
 
-import com.example.springredditclone.exceptions.SpringRedditException;
+import com.example.springredditclone.exceptions.NotFoundException;
 import com.example.springredditclone.model.*;
 import com.example.springredditclone.payload.request.RegistraterRequest;
 import com.example.springredditclone.payload.request.SignInRequest;
@@ -12,6 +12,7 @@ import com.example.springredditclone.service.AuthService;
 import com.example.springredditclone.service.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -43,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     public void signUp(RegistraterRequest registraterRequest) {
 
         if (userRepository.findByEmail(registraterRequest.getEmail()).isPresent()) {
-            throw new SpringRedditException("User Email Exist");
+            throw new NotFoundException("User Email Exist");
         }
 
         User user = new User();
@@ -55,26 +57,26 @@ public class AuthServiceImpl implements AuthService {
 
         Set<ERole> roles = registraterRequest.getRoles();
         if (roles.isEmpty())
-            throw new SpringRedditException("Role is empty");
+            throw new NotFoundException("Role is empty");
 
         roles.forEach(
                 eRole -> {
                     switch (eRole) {
                         case ROLE_USER:
                             Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(
-                                    () -> new SpringRedditException("ROLE: " + ERole.ROLE_USER + " NOT FOUND"));
+                                    () -> new NotFoundException("ROLE: " + ERole.ROLE_USER + " NOT FOUND"));
                             user.getRoles().add(userRole);
                             break;
 
                         case ROLE_ADMIN:
                             Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(
-                                    () -> new SpringRedditException("ROLE: " + ERole.ROLE_ADMIN + " NOT FOUND"));
+                                    () -> new NotFoundException("ROLE: " + ERole.ROLE_ADMIN + " NOT FOUND"));
                             user.getRoles().add(adminRole);
                             break;
 
                         case ROLE_MODERATOR:
                             Role moderatorRole = roleRepository.findByName(ERole.ROLE_MODERATOR).orElseThrow(
-                                    () -> new SpringRedditException("ROLE: " + ERole.ROLE_MODERATOR + " NOT FOUND"));
+                                    () -> new NotFoundException("ROLE: " + ERole.ROLE_MODERATOR + " NOT FOUND"));
                             user.getRoles().add(moderatorRole);
                             break;
                     }
@@ -107,13 +109,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void enableAccount(String token) {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token).orElseThrow(
-                () -> new SpringRedditException("Token Not Found" + token));
+                () -> new NotFoundException("Token Not Found" + token));
         activateAccount(verificationToken);
     }
 
     private void activateAccount(VerificationToken verificationToken) {
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(
-                () -> new SpringRedditException("User Not Found"));
+                () -> new NotFoundException("User Not Found"));
         user.setEnabled(true);
         userRepository.save(user);
     }
