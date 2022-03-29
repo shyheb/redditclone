@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +24,8 @@ public class SubReddit {
     @NotBlank(message = "Description is required")
     private String description;
     private Instant createdDate;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subReddit")
+    private List<Post> posts;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
