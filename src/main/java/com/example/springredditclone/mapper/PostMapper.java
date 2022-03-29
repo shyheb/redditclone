@@ -21,4 +21,9 @@ public interface PostMapper {
     @Mapping(target = "user", source = "user")
     @Mapping(target = "subReddit", source = "subReddit")
     Post mapDtoToPost(PostDto postDto, SubReddit subReddit, User user);
+
+
+    @Mapping(target = "subbreditName", source = "subReddit.name")
+    @Mapping(target = "postName", source = "name")
+    PostDto mapPostToDto(Post post);
 }
