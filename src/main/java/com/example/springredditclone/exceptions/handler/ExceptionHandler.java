@@ -1,5 +1,6 @@
-package com.example.springredditclone.exceptions;
+package com.example.springredditclone.exceptions.handler;
 
+import com.example.springredditclone.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +26,11 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException illegalArgumentException){
         return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler({WordException.class})
+    public ResponseEntity<?> handleIllegalArgumentException(WordException wordException){
+        return new ResponseEntity<>(wordException.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 
 }

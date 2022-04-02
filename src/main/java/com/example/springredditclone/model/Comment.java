@@ -9,6 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,8 +23,11 @@ public class Comment {
     @NotEmpty
     private String text;
     private Instant createdDate;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "postId", referencedColumnName = "id")
     private Post post;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
 
 }

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/posts")
+@RequestMapping("api/posts/")
 @AllArgsConstructor
 public class PostController {
 
@@ -25,7 +25,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAllPosts(@PathVariable Long id){
+    public ResponseEntity<?> getPost(@PathVariable Long id){
         return new ResponseEntity<>(postService.getPost(id),HttpStatus.OK);
     }
 
