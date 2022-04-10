@@ -1,13 +1,14 @@
 package com.example.springredditclone.service;
 
 import com.example.springredditclone.dto.PostDto;
+import com.example.springredditclone.model.Post;
 
 import java.util.List;
 
 public interface PostService {
-    PostDto createPost(PostDto postDto);
-    PostDto getPost(Long id);
-    List<PostDto> getAllPosts();
-    List<PostDto> getPostsBySubbredit(Long id);
-    List<PostDto> getPostsByUsername(String username);
+    Post createPost(PostDto postDto);
+    Post getPost(Long id);
+    List<Post> getAllPosts();
+    List<Post> getPostsBySubbredit(Long id);
+    List<Post> getPostsByUsername(String username);
 }

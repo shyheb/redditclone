@@ -31,45 +31,30 @@ public class PostServiceImpl implements PostService {
     private final SubRedditService subRedditService;
 
     @Transactional
-    public PostDto createPost(PostDto postDto){
+    public Post createPost(PostDto postDto){
         SubReddit subReddit = subRedditService.findByName(postDto.getSubbreditName());
-        Post post = postRepository.save(PostMapper.INSTANCE.mapDtoToPost(postDto,subReddit,
+        return postRepository.save(PostMapper.INSTANCE.mapDtoToPost(postDto,subReddit,
                 (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
-        postDto.setId(post.getId());
-        return postDto;
     }
 
     @Transactional(readOnly = true)
-    public PostDto getPost(Long id){
-       Post post = postRepository.findById(id).orElseThrow(()->new NotFoundException("Post Not Found"));
-       return PostMapper.INSTANCE.mapPostToDto(post);
+    public Post getPost(Long id){
+        return postRepository.findById(id).orElseThrow(()->new NotFoundException("Post Not Found"));
     }
 
     @Transactional(readOnly = true)
-    public List<PostDto> getAllPosts(){
-        List<Post> post = postRepository.findAll();
-        return post
-                .stream()
-                .map(PostMapper.INSTANCE::mapPostToDto)
-                .collect(Collectors.toList());
+    public List<Post> getAllPosts(){
+        return postRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsBySubbredit(Long id){
-        List<Post> post = postRepository.findBySubRedditId(id);
-        return post
-                .stream()
-                .map(PostMapper.INSTANCE::mapPostToDto)
-                .collect(Collectors.toList());
+    public List<Post> getPostsBySubbredit(Long id){
+        return postRepository.findBySubRedditId(id);
     }
 
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsByUsername(String username){
-        List<Post> post = postRepository.findPostByUserName(username);
-        return post
-                .stream()
-                .map(PostMapper.INSTANCE::mapPostToDto)
-                .collect(Collectors.toList());
+    public List<Post> getPostsByUsername(String username){
+        return postRepository.findPostByUserName(username);
     }
 
 

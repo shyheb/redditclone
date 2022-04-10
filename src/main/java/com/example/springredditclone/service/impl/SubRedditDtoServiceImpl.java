@@ -21,25 +21,19 @@ public class SubRedditDtoServiceImpl implements SubRedditService {
 
     @Override
     @Transactional
-    public SubRedditDto save(SubRedditDto subRedditDto) {
-        SubReddit subReddit = subRedditRepository.save(SubRedditMapper.INSTANCE.mapDtoToSubreddit(subRedditDto));
-        subRedditDto.setId(subReddit.getId());
-        return subRedditDto;
+    public SubReddit save(SubRedditDto subRedditDto) {
+        return subRedditRepository.save(SubRedditMapper.INSTANCE.mapDtoToSubreddit(subRedditDto));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<SubRedditDto> getAllSubReddit() {
-        return subRedditRepository.findAll()
-                .stream()
-                .map(SubRedditMapper.INSTANCE::mapSubredditToDto)
-                .collect(Collectors.toList());
+    public List<SubReddit> getAllSubReddit() {
+        return subRedditRepository.findAll();
     }
 
     @Override
-    public SubRedditDto getSubbredit(Long id) {
-        SubReddit subReddit = subRedditRepository.findById(id).orElseThrow(()-> new NotFoundException("Subbreddit Not Found"));
-        return SubRedditMapper.INSTANCE.mapSubredditToDto(subReddit);
+    public SubReddit getSubbredit(Long id) {
+        return subRedditRepository.findById(id).orElseThrow(()-> new NotFoundException("Subbreddit Not Found"));
     }
 
     @Override

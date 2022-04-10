@@ -14,12 +14,12 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler({MailException.class})
-    public ResponseEntity<?> mailException(NotFoundException notFoundException){
+    public ResponseEntity<?> handleMailException(NotFoundException notFoundException){
         return new ResponseEntity<>(notFoundException.getMessage(), HttpStatus.CONFLICT);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler({NotActivatedException.class, JwtException.class})
-    public ResponseEntity<?> mailException(NotActivatedException notActivatedException){
+    public ResponseEntity<?> handleNotActivated(NotActivatedException notActivatedException){
         return new ResponseEntity<>(notActivatedException.getMessage(), HttpStatus.CONFLICT);
     }
 
@@ -29,8 +29,13 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler({WordException.class})
-    public ResponseEntity<?> handleIllegalArgumentException(WordException wordException){
+    public ResponseEntity<?> handleWordException(WordException wordException){
         return new ResponseEntity<>(wordException.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler({FoundException.class})
+    public ResponseEntity<?> handleExistException(FoundException foundException){
+        return new ResponseEntity<>(foundException.getMessage(), HttpStatus.FOUND);
     }
 
 }

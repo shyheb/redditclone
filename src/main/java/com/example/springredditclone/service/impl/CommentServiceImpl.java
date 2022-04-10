@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto save(CommentDto commentDto) {
+    public Comment save(CommentDto commentDto) {
         Post post = postRepository.findById(commentDto.getPostId()).orElseThrow(() -> new NotFoundException("Post Not Found"));
         Comment comment = commentRepository.save(CommentMapper.INSTANCE.mapDtoToComment(
                 commentDto,
@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
         String message = post.getUser().getUsername() + " posted a comment on your post.";
         sendCommentNotification(message, post.getUser());
 
-        return CommentMapper.INSTANCE.mapCommentToDto(comment);
+        return comment;
     }
 
     private void sendCommentNotification(String message, User user) {
@@ -53,21 +53,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentDto> getAllCommentsForPost(Long postId) {
+    public List<Comment> getAllCommentsForPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("POST NOT FOUND"));
-        return commentRepository.findByPostId(post.getId())
-                .stream()
-                .map(CommentMapper.INSTANCE::mapCommentToDto).collect(toList());
+        return commentRepository.findByPostId(post.getId());
     }
 
     @Transactional(readOnly = true)
-    public List<CommentDto> getAllCommentsForUser(String email) {
+    public List<Comment> getAllCommentsForUser(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User name not found exception"));
-        return commentRepository.findByUserEmail(email)
-                .stream()
-                .map(CommentMapper.INSTANCE::mapCommentToDto)
-                .collect(toList());
+        return commentRepository.findByUserEmail(email);
     }
 
     public boolean containsSwearWords(String comment) {

@@ -6,8 +6,8 @@ import com.example.springredditclone.model.SubReddit;
 import java.util.List;
 
 public interface SubRedditService {
-    SubRedditDto save(SubRedditDto subRedditDto);
-    List<SubRedditDto> getAllSubReddit();
-    SubRedditDto getSubbredit(Long id);
+    SubReddit save(SubRedditDto subRedditDto);
+    List<SubReddit> getAllSubReddit();
+    SubReddit getSubbredit(Long id);
     SubReddit findByName(String name);
 }

@@ -6,8 +6,8 @@ import com.example.springredditclone.model.Comment;
 import java.util.List;
 
 public interface CommentService {
-    CommentDto save(CommentDto commentDto);
-    List<CommentDto> getAllCommentsForPost(Long postId);
-    List<CommentDto> getAllCommentsForUser(String email);
+    Comment save(CommentDto commentDto);
+    List<Comment> getAllCommentsForPost(Long postId);
+    List<Comment> getAllCommentsForUser(String email);
     boolean containsSwearWords(String comment);
 }

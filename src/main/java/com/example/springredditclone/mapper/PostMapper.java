@@ -20,6 +20,7 @@ public interface PostMapper {
     @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "subReddit", source = "subReddit")
+    @Mapping(target = "voteCount", constant = "0")
     Post mapDtoToPost(PostDto postDto, SubReddit subReddit, User user);
 
 
