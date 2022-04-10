@@ -1,6 +1,7 @@
 package com.example.springredditclone.controller;
 
 import com.example.springredditclone.dto.PostDto;
+import com.example.springredditclone.dto.PostResponse;
 import com.example.springredditclone.mapper.PostMapper;
 import com.example.springredditclone.model.Post;
 import com.example.springredditclone.service.PostService;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class PostController {
 
     private final PostService postService;
+    private final PostMapper postMapper;
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto){
@@ -27,35 +29,35 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        List<PostDto> postDtoList = postService.getAllPosts()
+    public ResponseEntity<List<PostResponse>> getAllPosts(){
+        List<PostResponse> postDtoList = postService.getAllPosts()
                 .stream()
-                .map(PostMapper.INSTANCE::mapPostToDto)
+                .map(postMapper::mapToDto)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(postDtoList,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPost(@PathVariable Long id){
-        PostDto postDto = PostMapper.INSTANCE.mapPostToDto(postService.getPost(id));
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id){
+        PostResponse postDto = postMapper.mapToDto(postService.getPost(id));
         return new ResponseEntity<>(postDto,HttpStatus.OK);
     }
 
     @GetMapping("by-subreddit/{id}")
-    public ResponseEntity<List<PostDto>> getPostsBySubredditId(@PathVariable Long id){
-        List<PostDto> postDtoList = postService.getPostsBySubbredit(id)
+    public ResponseEntity<List<PostResponse>> getPostsBySubredditId(@PathVariable Long id){
+        List<PostResponse> postDtoList = postService.getPostsBySubbredit(id)
                 .stream()
-                .map(PostMapper.INSTANCE::mapPostToDto)
+                .map(postMapper::mapToDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(postDtoList,HttpStatus.OK);
     }
 
     @GetMapping("by-user/{username}")
-    public ResponseEntity<List<PostDto>> getPostsByUsername(@PathVariable String username){
-        List<PostDto> postDtoList = postService.getPostsByUsername(username)
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable String username){
+        List<PostResponse> postDtoList = postService.getPostsByUsername(username)
                 .stream()
-                .map(PostMapper.INSTANCE::mapPostToDto)
+                .map(postMapper::mapToDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(postDtoList,HttpStatus.OK);
     }

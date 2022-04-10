@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class SubRedditDtoServiceImpl implements SubRedditService {
+public class SubRedditServiceImpl implements SubRedditService {
 
     private final SubRedditRepository subRedditRepository;
 
@@ -38,6 +37,6 @@ public class SubRedditDtoServiceImpl implements SubRedditService {
 
     @Override
     public SubReddit findByName(String name) {
-        return subRedditRepository.findByName(name).orElseThrow(()-> new NotFoundException("Subbreddit Not Found"));
+        return subRedditRepository.findByName(name).orElseThrow(()-> new NotFoundException("Subbreddit Not Found by name" + name ));
     }
 }
