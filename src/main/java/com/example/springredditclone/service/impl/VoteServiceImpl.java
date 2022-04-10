@@ -12,6 +12,7 @@ import com.example.springredditclone.service.VoteService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class VoteServiceImpl implements VoteService {
     private final PostService postService;
 
     @Override
+    @Transactional(readOnly = true)
     public void addVote(VoteDto voteDto) {
         Post post = postService.getPost(voteDto.getPostId());
         Optional<Vote> voteByPostAndUser = voteRepository.getTopByPostAndUserOrderByIdDesc(post, (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());

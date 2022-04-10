@@ -24,18 +24,20 @@ public class SubRedditServiceImpl implements SubRedditService {
         return subRedditRepository.save(SubRedditMapper.INSTANCE.mapDtoToSubreddit(subRedditDto));
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public List<SubReddit> getAllSubReddit() {
         return subRedditRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SubReddit getSubbredit(Long id) {
         return subRedditRepository.findById(id).orElseThrow(()-> new NotFoundException("Subbreddit Not Found"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SubReddit findByName(String name) {
         return subRedditRepository.findByName(name).orElseThrow(()-> new NotFoundException("Subbreddit Not Found by name" + name ));
     }
