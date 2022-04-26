@@ -4,6 +4,7 @@ import com.example.springredditclone.exceptions.NotFoundException;
 import com.example.springredditclone.model.*;
 import com.example.springredditclone.payload.request.RegistraterRequest;
 import com.example.springredditclone.payload.request.SignInRequest;
+import com.example.springredditclone.payload.request.SignInResponse;
 import com.example.springredditclone.repository.RoleRepository;
 import com.example.springredditclone.repository.UserRepository;
 import com.example.springredditclone.repository.VerificationTokenRepository;
@@ -56,33 +57,35 @@ public class AuthServiceImpl implements AuthService {
         user.setEnabled(false);
 
         Set<ERole> roles = registraterRequest.getRoles();
-        if (roles.isEmpty())
-            throw new NotFoundException("Role is empty");
+        if (roles == null || roles.isEmpty()) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(
+                    () -> new NotFoundException("ROLE: " + ERole.ROLE_USER + " NOT FOUND"));
+            user.getRoles().add(userRole);
+        }else {
+            roles.forEach(
+                    eRole -> {
+                        switch (eRole) {
+                            case ROLE_USER:
+                                Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(
+                                        () -> new NotFoundException("ROLE: " + ERole.ROLE_USER + " NOT FOUND"));
+                                user.getRoles().add(userRole);
+                                break;
 
-        roles.forEach(
-                eRole -> {
-                    switch (eRole) {
-                        case ROLE_USER:
-                            Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(
-                                    () -> new NotFoundException("ROLE: " + ERole.ROLE_USER + " NOT FOUND"));
-                            user.getRoles().add(userRole);
-                            break;
+                            case ROLE_ADMIN:
+                                Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(
+                                        () -> new NotFoundException("ROLE: " + ERole.ROLE_ADMIN + " NOT FOUND"));
+                                user.getRoles().add(adminRole);
+                                break;
 
-                        case ROLE_ADMIN:
-                            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(
-                                    () -> new NotFoundException("ROLE: " + ERole.ROLE_ADMIN + " NOT FOUND"));
-                            user.getRoles().add(adminRole);
-                            break;
-
-                        case ROLE_MODERATOR:
-                            Role moderatorRole = roleRepository.findByName(ERole.ROLE_MODERATOR).orElseThrow(
-                                    () -> new NotFoundException("ROLE: " + ERole.ROLE_MODERATOR + " NOT FOUND"));
-                            user.getRoles().add(moderatorRole);
-                            break;
+                            case ROLE_MODERATOR:
+                                Role moderatorRole = roleRepository.findByName(ERole.ROLE_MODERATOR).orElseThrow(
+                                        () -> new NotFoundException("ROLE: " + ERole.ROLE_MODERATOR + " NOT FOUND"));
+                                user.getRoles().add(moderatorRole);
+                                break;
+                        }
                     }
-                }
-        );
-
+            );
+        }
         userRepository.save(user);
 
         String token = generateVerificationToken(user);
@@ -122,7 +125,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public String signIn(SignInRequest signInRequest) {
+    public SignInResponse signIn(SignInRequest signInRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateToken(authentication);
@@ -132,6 +135,6 @@ public class AuthServiceImpl implements AuthService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return jwt;
+        return SignInResponse.builder().token(jwt).email(userDetails.getEmail()).build();
     }
 }

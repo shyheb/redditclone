@@ -14,5 +14,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "select p from Post p where p.subReddit.id = ?1 ")
     List<Post> findBySubRedditId(Long subRedditId);
 
-    List<Post> findPostByUserName(String username);
+    List<Post> findPostByUserEmail(String email);
 }

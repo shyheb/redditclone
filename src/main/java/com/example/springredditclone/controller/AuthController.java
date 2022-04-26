@@ -2,6 +2,7 @@ package com.example.springredditclone.controller;
 
 import com.example.springredditclone.payload.request.RegistraterRequest;
 import com.example.springredditclone.payload.request.SignInRequest;
+import com.example.springredditclone.payload.request.SignInResponse;
 import com.example.springredditclone.payload.response.JwtResponse;
 import com.example.springredditclone.service.AuthService;
 import lombok.AllArgsConstructor;
@@ -32,9 +33,8 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest){
-        String token = authService.signIn(signInRequest);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest signInRequest){
+        return new ResponseEntity<>(authService.signIn(signInRequest), HttpStatus.OK);
 
     }
 }

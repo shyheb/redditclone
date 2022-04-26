@@ -53,9 +53,9 @@ public class PostController {
         return new ResponseEntity<>(postDtoList,HttpStatus.OK);
     }
 
-    @GetMapping("by-user/{username}")
-    public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable String username){
-        List<PostResponse> postDtoList = postService.getPostsByUsername(username)
+    @GetMapping("by-user/{email}")
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable String email){
+        List<PostResponse> postDtoList = postService.getPostsByEmail(email)
                 .stream()
                 .map(postMapper::mapToDto)
                 .collect(Collectors.toList());

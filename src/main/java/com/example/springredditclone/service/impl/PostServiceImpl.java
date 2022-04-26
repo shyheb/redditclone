@@ -49,8 +49,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<Post> getPostsByUsername(String username) {
-        return postRepository.findPostByUserName(username);
+    public List<Post> getPostsByEmail(String email) {
+        return postRepository.findPostByUserEmail(email);
     }
 
 
