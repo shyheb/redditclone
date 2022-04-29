@@ -34,7 +34,7 @@ public abstract class PostMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "subbreditName", source = "subReddit.name")
-    @Mapping(target = "userName", source = "user.name")
+    @Mapping(target = "userName", source = "user.username")
     @Mapping(target = "commentCount", expression = "java(commentCount(post))")
     @Mapping(target = "duration", expression = "java(getDuration(post))")
     @Mapping(target = "postName", source = "name")

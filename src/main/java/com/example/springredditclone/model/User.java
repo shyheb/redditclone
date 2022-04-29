@@ -29,7 +29,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "Name cannot be empty or null")
-    private String name;
+    private String username;
     @NotBlank(message = "Password cannot be empty or null")
     @JsonIgnore
     private String password;
@@ -57,7 +57,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
