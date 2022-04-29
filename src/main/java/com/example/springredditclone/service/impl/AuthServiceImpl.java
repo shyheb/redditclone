@@ -1,5 +1,6 @@
 package com.example.springredditclone.service.impl;
 
+import com.example.springredditclone.config.AppConfig;
 import com.example.springredditclone.exceptions.NotFoundException;
 import com.example.springredditclone.model.*;
 import com.example.springredditclone.payload.request.RegistraterRequest;
@@ -40,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final AppConfig appConfig;
 
     @Override
     @Transactional
@@ -93,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
         mailService.sendEmail(new NotificationEmail(
                 "Activation Account",
                 user.getEmail(),
-                "Thank you for sign up <br/> Please click here to activate you Email : <a href='http://localhost:8080/api/auth/accountVerification/\" + token'> http://localhost:8080/api/auth/accountVerification/" + token + "</a>"
+                "Thank you for sign up <br/> Please click here to activate you Email : <a href='"+appConfig.getAppUrl()+"'/api/auth/accountVerification/\" + token'> http://localhost:8080/api/auth/accountVerification/" + token + "</a>"
         ));
 
     }

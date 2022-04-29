@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "reddit_users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
